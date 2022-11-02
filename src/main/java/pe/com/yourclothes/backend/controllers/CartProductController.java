@@ -8,6 +8,7 @@ import pe.com.yourclothes.backend.entities.Cart;
 import pe.com.yourclothes.backend.entities.CartProduct;
 import pe.com.yourclothes.backend.entities.Product;
 import pe.com.yourclothes.backend.entities.User;
+import pe.com.yourclothes.backend.exceptions.ResourceNotFoundException;
 import pe.com.yourclothes.backend.repositories.CartProductRepository;
 import pe.com.yourclothes.backend.repositories.CartRepository;
 import pe.com.yourclothes.backend.repositories.ProductRepository;
@@ -44,7 +45,8 @@ public class CartProductController {
     @GetMapping("/carts_products/{id}")
     public ResponseEntity<CartProduct> getCartProductById(@PathVariable("id") Long id)
     {
-        CartProduct cartProduct = cartProductRepository.findById(id).get();
+        CartProduct cartProduct = cartProductRepository.findById(id)
+                .orElseThrow(()->new ResourceNotFoundException("CartProduct not found"));
         cartProduct.getProduct().setCartProducts(null);
         cartProduct.getProduct().setShop(null);
         cartProduct.getCart().setCartProducts(null);
@@ -54,17 +56,20 @@ public class CartProductController {
     @GetMapping("/carts_products/cart_id/{id}")
     public ResponseEntity<List<CartProduct>> getCartByUser(@PathVariable("id") Long id)
     {
-        Cart cart = cartRepository.findById(id).get();
+        Cart cart = cartRepository.findById(id)
+                .orElseThrow(()->new ResourceNotFoundException("Cart not found"));
         List<CartProduct> cartProducts = cartProductRepository.findByCart(cart);
         return new ResponseEntity<List<CartProduct>>(cartProducts, HttpStatus.OK);
     }
     @PostMapping("/carts_products/cart_id/{cart_id}/product_id/{product_id}")
     public ResponseEntity<CartProduct> createCart(@PathVariable("cart_id") Long cart_id,@PathVariable("product_id") Long product_id, @RequestBody CartProduct cartProduct){
 
-        Cart foundCart = cartRepository.findById(cart_id).get();
+        Cart foundCart = cartRepository.findById(cart_id)
+                .orElseThrow(()->new ResourceNotFoundException("Cart not found"));
         foundCart.setCartProducts(null);
         foundCart.setUser(null);
-        Product foundProduct = productRepository.findById(product_id).get();
+        Product foundProduct = productRepository.findById(product_id)
+                .orElseThrow(()->new ResourceNotFoundException("Product not found"));
         foundProduct.setShop(null);
         foundProduct.setCartProducts(null);
 
@@ -78,7 +83,8 @@ public class CartProductController {
     @DeleteMapping("/carts_products/{id}")
     public ResponseEntity<HttpStatus> deleteProductById(@PathVariable("id") Long id)
     {
-        CartProduct foundCartProduct = cartProductRepository.findById(id).get();
+        CartProduct foundCartProduct = cartProductRepository.findById(id)
+                .orElseThrow(()->new ResourceNotFoundException("CartProduct not found"));
 
         cartRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

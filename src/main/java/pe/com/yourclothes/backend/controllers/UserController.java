@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pe.com.yourclothes.backend.entities.*;
+import pe.com.yourclothes.backend.exceptions.ResourceNotFoundException;
 import pe.com.yourclothes.backend.repositories.*;
 
 import java.util.List;
@@ -78,7 +79,8 @@ public class UserController {
     @GetMapping("/users/{id}")
     public ResponseEntity<User> getUserById(@PathVariable("id") Long id)
     {
-        User user = userRepository.findById(id).get();
+        User user = userRepository.findById(id)
+                .orElseThrow(()->new ResourceNotFoundException("User not found"));
 
         if(user.getShop() != null){
             user.getShop().setUser(null);
@@ -111,7 +113,8 @@ public class UserController {
     @PutMapping("/users/{id}")
     public ResponseEntity<User> updateUserById(@PathVariable("id") Long id, @RequestBody User user)
     {
-        User foundUser = userRepository.findById(id).get();
+        User foundUser = userRepository.findById(id)
+                .orElseThrow(()->new ResourceNotFoundException("User not found"));;
         if(user.getName() != null)
             foundUser.setName(user.getName());
         if(user.getLastname() != null)
@@ -136,7 +139,8 @@ public class UserController {
     @DeleteMapping("/users/{id}")
     public ResponseEntity<HttpStatus> deleteUserById(@PathVariable("id") Long id)
     {
-        User foundUser = userRepository.findById(id).get();
+        User foundUser = userRepository.findById(id)
+                .orElseThrow(()->new ResourceNotFoundException("User not found"));;
         if(foundUser.getShop() != null)
         {
             for(Product product: foundUser.getShop().getProductList())

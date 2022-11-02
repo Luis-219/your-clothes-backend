@@ -8,6 +8,7 @@ import pe.com.yourclothes.backend.entities.CartProduct;
 import pe.com.yourclothes.backend.entities.Product;
 import pe.com.yourclothes.backend.entities.Shop;
 import pe.com.yourclothes.backend.entities.User;
+import pe.com.yourclothes.backend.exceptions.ResourceNotFoundException;
 import pe.com.yourclothes.backend.repositories.CartProductRepository;
 import pe.com.yourclothes.backend.repositories.ProductRepository;
 import pe.com.yourclothes.backend.repositories.ShopRepository;
@@ -59,7 +60,8 @@ public class ShopController {
     @PostMapping("/shops/{id}")
     public ResponseEntity<Shop> createShop(@PathVariable("id") Long id, @RequestBody Shop shop){
 
-        User userOwner = userRepository.findById(id).get();
+        User userOwner = userRepository.findById(id)
+                .orElseThrow(()->new ResourceNotFoundException("User not found"));;
         Shop newShop = shopRepository.save(new Shop(
                 shop.getName(),
                 shop.getPhone(),
@@ -72,7 +74,8 @@ public class ShopController {
     @GetMapping("/shops/{id}")
     public ResponseEntity<Shop> getShopById(@PathVariable("id") Long id)
     {
-        Shop shop = shopRepository.findById(id).get();
+        Shop shop = shopRepository.findById(id)
+                .orElseThrow(()->new ResourceNotFoundException("Shop not found"));;
         shop.getUser().setShop(null);
         for(Product product: shop.getProductList())
         {
@@ -84,7 +87,8 @@ public class ShopController {
     @PutMapping("/shops/{id}")
     public  ResponseEntity<Shop> updateShopById(@PathVariable("id") Long id, @RequestBody Shop shop)
     {
-        Shop foundShop = shopRepository.findById(id).get();
+        Shop foundShop = shopRepository.findById(id)
+                .orElseThrow(()->new ResourceNotFoundException("Shop not found"));;
 
         if(shop.getName() != null)
             foundShop.setName(shop.getName());
@@ -104,7 +108,8 @@ public class ShopController {
     @DeleteMapping("/shops/{id}")
     public ResponseEntity<HttpStatus> deleteShopByID(@PathVariable("id") Long id)
     {
-        Shop foundShop = shopRepository.findById(id).get();
+        Shop foundShop = shopRepository.findById(id)
+                .orElseThrow(()->new ResourceNotFoundException("Shop not found"));;
         for(Product product: foundShop.getProductList())
         {
             for (CartProduct cartProduct: product.getCartProducts())

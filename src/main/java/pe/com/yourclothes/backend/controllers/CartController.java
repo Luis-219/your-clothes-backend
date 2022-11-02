@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pe.com.yourclothes.backend.entities.*;
+import pe.com.yourclothes.backend.exceptions.ResourceNotFoundException;
 import pe.com.yourclothes.backend.repositories.CartProductRepository;
 import pe.com.yourclothes.backend.repositories.CartRepository;
 import pe.com.yourclothes.backend.repositories.ProductRepository;
@@ -42,7 +43,8 @@ public class CartController {
     @GetMapping("/carts/{id}")
     public ResponseEntity<Cart> getCartById(@PathVariable("id") Long id)
     {
-        Cart cart = cartRepository.findById(id).get();
+        Cart cart = cartRepository.findById(id)
+                .orElseThrow(()->new ResourceNotFoundException("Cart not found"));
         cart.setCartProducts(null);
         cart.getUser().setShop(null);
         cart.getUser().setCart(null);
@@ -63,7 +65,8 @@ public class CartController {
     @PostMapping("/carts/user_id/{id}")
     public ResponseEntity<Cart> createCart(@PathVariable("id") Long id, @RequestBody Cart cart){
 
-        User foundUser = userRepository.findById(id).get();
+        User foundUser = userRepository.findById(id)
+                .orElseThrow(()->new ResourceNotFoundException("User not found"));
         Cart newCart = cartRepository.save(new Cart(
                 cart.getTotal_purchase(),
                 cart.getQuantity_products(),
@@ -74,7 +77,8 @@ public class CartController {
     @PutMapping("/carts/{id}")
     public  ResponseEntity<Cart> updateCartById(@PathVariable("id") Long id, @RequestBody Cart cart)
     {
-        Cart foundCart = cartRepository.findById(id).get();
+        Cart foundCart = cartRepository.findById(id)
+                .orElseThrow(()->new ResourceNotFoundException("Cart not found"));
 
         if(cart.getTotal_purchase() != null)
             foundCart.setTotal_purchase(cart.getTotal_purchase());
@@ -91,7 +95,8 @@ public class CartController {
     @DeleteMapping("/carts/{id}")
     public ResponseEntity<HttpStatus> deleteProductById(@PathVariable("id") Long id)
     {
-        Cart foundCart = cartRepository.findById(id).get();
+        Cart foundCart = cartRepository.findById(id)
+                .orElseThrow(()->new ResourceNotFoundException("Cart not found"));
         for(CartProduct cartProduct: foundCart.getCartProducts())
         {
             cartProductRepository.deleteById(cartProduct.getId());
