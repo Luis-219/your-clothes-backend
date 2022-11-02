@@ -32,8 +32,6 @@ public class BackendApplication {
 
 			System.out.println(user2.getName());
 
-			User user3= userRepository.findByDniAndName("263", "Luis");
-			System.out.println(user3.getEmail());
 
 		};
 	}

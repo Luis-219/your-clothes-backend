@@ -96,7 +96,7 @@ public class UserController {
     @GetMapping("/users/email/{email}")
     public ResponseEntity<User> getUserByEmail(@PathVariable("email") String email)
     {
-        User user = userRepository.findByEmail(email);
+        User user = userRepository.findByEmailSQL(email);
 
         if(user.getShop() != null){
             user.getShop().setUser(null);
