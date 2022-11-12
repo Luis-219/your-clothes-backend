@@ -16,6 +16,7 @@ import pe.com.yourclothes.backend.repositories.UserRepository;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api")
 public class ShopController {
@@ -33,8 +34,8 @@ public class ShopController {
         List<Shop> shops = shopRepository.findAll();
 
         for(Shop shop: shops){
-            shop.getUser().setShop(null);
-            shop.getUser().setCart(null);
+            shop.setUser(null);
+            shop.setProductList(null);
         }
 
         return new ResponseEntity<List<Shop>>(shops, HttpStatus.OK);
@@ -63,10 +64,13 @@ public class ShopController {
         User userOwner = userRepository.findById(id)
                 .orElseThrow(()->new ResourceNotFoundException("User not found"));;
         Shop newShop = shopRepository.save(new Shop(
+                shop.getIdUser(),
                 shop.getName(),
                 shop.getPhone(),
-                shop.getAddress(),
-                shop.getDescription(),
+                shop.getAdress(),
+                shop.getDescripción(),
+                shop.getAmountProducts(),
+                shop.getAceptación(),
                 userOwner
         ));
         return new ResponseEntity<Shop>(newShop, HttpStatus.CREATED);
@@ -94,10 +98,15 @@ public class ShopController {
             foundShop.setName(shop.getName());
         if(shop.getPhone() != null)
             foundShop.setPhone(shop.getPhone());
-        if(shop.getAddress() != null)
-            foundShop.setAddress(shop.getAddress());
-        if(shop.getDescription() != null)
-            foundShop.setDescription(shop.getDescription());
+        if(shop.getAdress() != null)
+            foundShop.setAdress(shop.getAdress());
+        if(shop.getDescripción() != null)
+            foundShop.setDescripción(shop.getDescripción());
+        if(shop.getAmountProducts() != null)
+            foundShop.setAmountProducts(shop.getAmountProducts());
+        if(shop.getAceptación() != null)
+            foundShop.setAceptación(shop.getAceptación());
+
 
         Shop updateShop = shopRepository.save(foundShop);
         updateShop.setProductList(null);

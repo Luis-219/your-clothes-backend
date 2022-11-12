@@ -14,8 +14,10 @@ import pe.com.yourclothes.backend.repositories.CartProductRepository;
 import pe.com.yourclothes.backend.repositories.ProductRepository;
 import pe.com.yourclothes.backend.repositories.ShopRepository;
 
+import java.util.Date;
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api")
 public class ProductController {
@@ -32,7 +34,7 @@ public class ProductController {
         List<Product> products = productRepository.findAll();
 
         for(Product product: products){
-            product.getShop().setProductList(null);
+            product.setShop(null);
             product.setCartProducts(null);
         }
         return new ResponseEntity<List<Product>>(products, HttpStatus.OK);
@@ -41,14 +43,25 @@ public class ProductController {
     public ResponseEntity<Product> createProduct(@PathVariable("id") Long id, @RequestBody Product product){
 
         Shop foundShop = shopRepository.findById(id)
-                .orElseThrow(()->new ResourceNotFoundException("Shop not found"));;
+                .orElseThrow(()->new ResourceNotFoundException("Shop not found"));
+        foundShop.setUser(null);
+        foundShop.setProductList(null);
         Product newProduct = productRepository.save(new Product(
+                foundShop.getId(),
                 product.getName(),
-                product.getPrice(),
-                product.getSize(),
-                product.getBrand(),
-                product.getSeason(),
+                product.getShopname(),
+                new Date(),
+                product.getCondition(),
                 product.getQuantity(),
+                product.getPrice(),
+                product.getGender(),
+                product.getSize(),
+                product.getMaterial(),
+                product.getBrand(),
+                product.getType(),
+                product.getSeason(),
+                product.getYear(),
+                product.getPricetype(),
                 foundShop
         ));
         return new ResponseEntity<Product>(newProduct, HttpStatus.CREATED);

@@ -20,7 +20,7 @@ public class User {
     private String password;
     private String dni;
     private String phone;
-    private String address;
+    private String adress;
 
     @OneToOne(mappedBy = "user")
     private Shop shop;
@@ -35,6 +35,6 @@ public class User {
         this.password = password;
         this.dni = dni;
         this.phone = phone;
-        this.address = address;
+        this.adress = address;
     }
 }

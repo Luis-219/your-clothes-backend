@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -16,12 +17,21 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     private Long id;
+    private Long idShop;
     private String name;
-    private Double price;
-    private String size;
-    private String brand;
-    private String season;
+    private String shopname;
+    private Date pubdate;
+    private String condition;
     private Integer quantity;
+    private Double price;
+    private String gender;
+    private String size;
+    private String material;
+    private String brand;
+    private String type;
+    private String season;
+    private String year;
+    private String pricetype;
 
     @ManyToOne
     @JoinColumn(name = "shop_id")
@@ -31,13 +41,22 @@ public class Product {
     private List<CartProduct> cartProducts;
 
 
-    public Product(String name, Double price, String size, String brand, String season, Integer quantity, Shop shop) {
+    public Product(Long idShop, String name, String shopname, Date pubdate, String condition, Integer quantity, Double price, String gender, String size, String material, String brand, String type, String season, String year, String pricetype, Shop shop) {
+        this.idShop = idShop;
         this.name = name;
-        this.price = price;
-        this.size = size;
-        this.brand = brand;
-        this.season = season;
+        this.shopname = shopname;
+        this.pubdate = pubdate;
+        this.condition = condition;
         this.quantity = quantity;
+        this.price = price;
+        this.gender = gender;
+        this.size = size;
+        this.material = material;
+        this.brand = brand;
+        this.type = type;
+        this.season = season;
+        this.year = year;
+        this.pricetype = pricetype;
         this.shop = shop;
     }
 }

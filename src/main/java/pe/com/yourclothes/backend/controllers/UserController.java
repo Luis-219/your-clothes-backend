@@ -10,7 +10,7 @@ import pe.com.yourclothes.backend.repositories.*;
 
 import java.util.List;
 
-
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api")
 public class UserController {
@@ -72,7 +72,7 @@ public class UserController {
                 user.getPassword(),
                 user.getDni(),
                 user.getPhone(),
-                user.getAddress()));
+                user.getAdress()));
         return new ResponseEntity<User>(newUser, HttpStatus.CREATED);
     }
 
@@ -127,8 +127,8 @@ public class UserController {
             foundUser.setDni(user.getDni());
         if(user.getPhone() != null)
             foundUser.setPhone(user.getPhone());
-        if(user.getAddress() != null)
-            foundUser.setAddress(user.getAddress());
+        if(user.getAdress() != null)
+            foundUser.setAdress(user.getAdress());
 
         User updatedUser = userRepository.save(foundUser);
         updatedUser.setShop(null);

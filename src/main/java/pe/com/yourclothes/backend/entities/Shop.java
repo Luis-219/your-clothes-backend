@@ -15,10 +15,14 @@ public class Shop {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private Long idUser;
     private String name;
     private String phone;
-    private String address;
-    private String description;
+    private String adress;
+    private String descripción;
+    private Integer amountProducts;
+    private String aceptación;
+
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -26,11 +30,15 @@ public class Shop {
     @OneToMany(mappedBy = "shop")
     private List<Product> productList;
 
-    public Shop(String name, String phone, String address, String description, User user) {
+
+    public Shop( Long idUser, String name, String phone, String adress, String descripción, Integer amountProducts, String aceptación, User user) {
         this.name = name;
+        this.idUser = idUser;
         this.phone = phone;
-        this.address = address;
-        this.description = description;
+        this.adress = adress;
+        this.descripción = descripción;
+        this.amountProducts = amountProducts;
+        this.aceptación = aceptación;
         this.user = user;
     }
 }
