@@ -73,19 +73,15 @@ public class ShopController {
                 shop.getAceptación(),
                 userOwner
         ));
-        return new ResponseEntity<Shop>(newShop, HttpStatus.CREATED);
+        return new ResponseEntity<Shop>(newShop, HttpStatus.OK);
     }
     @GetMapping("/shops/{id}")
     public ResponseEntity<Shop> getShopById(@PathVariable("id") Long id)
     {
         Shop shop = shopRepository.findById(id)
                 .orElseThrow(()->new ResourceNotFoundException("Shop not found"));;
-        shop.getUser().setShop(null);
-        for(Product product: shop.getProductList())
-        {
-            product.setShop(null);
-            product.setCartProducts(null);
-        }
+        shop.setUser(null);
+        shop.setProductList(null);
         return new ResponseEntity<Shop>(shop, HttpStatus.OK);
     }
     @PutMapping("/shops/{id}")
@@ -107,10 +103,9 @@ public class ShopController {
         if(shop.getAceptación() != null)
             foundShop.setAceptación(shop.getAceptación());
 
-
+        foundShop.setProductList(null);
+        foundShop.setUser(null);
         Shop updateShop = shopRepository.save(foundShop);
-        updateShop.setProductList(null);
-        updateShop.setUser(null);
 
         return new ResponseEntity<Shop>(updateShop, HttpStatus.OK);
     }

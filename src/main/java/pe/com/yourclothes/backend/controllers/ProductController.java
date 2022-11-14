@@ -71,8 +71,7 @@ public class ProductController {
     {
         Product product = productRepository.findById(id)
                 .orElseThrow(()->new ResourceNotFoundException("Product not found"));;
-        product.getShop().setUser(null);
-        product.getShop().setProductList(null);
+        product.setShop(null);
         product.setCartProducts(null);
         return new ResponseEntity<Product>(product, HttpStatus.OK);
     }
@@ -98,16 +97,28 @@ public class ProductController {
 
         if(product.getName() != null)
             foundProduct.setName(product.getName());
+        if(product.getShopname() != null)
+            foundProduct.setShopname(product.getShopname());
+        if(product.getCondition() != null)
+            foundProduct.setCondition(product.getCondition());
+        if(product.getQuantity() != null)
+            foundProduct.setQuantity(product.getQuantity());
         if(product.getPrice() != null)
             foundProduct.setPrice(product.getPrice());
         if(product.getSize() != null)
             foundProduct.setSize(product.getSize());
+        if(product.getMaterial() != null)
+            foundProduct.setMaterial(product.getMaterial());
         if(product.getBrand() != null)
             foundProduct.setBrand(product.getBrand());
+        if(product.getType() != null)
+            foundProduct.setType(product.getType());
         if(product.getSeason() != null)
             foundProduct.setSeason(product.getSeason());
-        if(product.getQuantity() != null)
-            foundProduct.setSeason(product.getSeason());
+        if(product.getYear() != null)
+            foundProduct.setYear(product.getYear());
+        if(product.getPricetype() != null)
+            foundProduct.setPricetype(product.getPricetype());
 
         Product updateProduct = productRepository.save(foundProduct);
         updateProduct.setCartProducts(null);

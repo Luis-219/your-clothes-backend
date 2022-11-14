@@ -16,6 +16,7 @@ import pe.com.yourclothes.backend.repositories.UserRepository;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api")
 public class CartProductController {
@@ -34,10 +35,8 @@ public class CartProductController {
 
         for(CartProduct cartProduct: cartProducts)
         {
-            cartProduct.getProduct().setShop(null);
-            cartProduct.getProduct().setCartProducts(null);
-            cartProduct.getCart().setCartProducts(null);
-            cartProduct.getCart().setUser(null);
+            cartProduct.setProduct(null);
+            cartProduct.setCart(null);
         }
 
         return new ResponseEntity<List<CartProduct>>(cartProducts, HttpStatus.OK);
@@ -47,10 +46,8 @@ public class CartProductController {
     {
         CartProduct cartProduct = cartProductRepository.findById(id)
                 .orElseThrow(()->new ResourceNotFoundException("CartProduct not found"));
-        cartProduct.getProduct().setCartProducts(null);
-        cartProduct.getProduct().setShop(null);
-        cartProduct.getCart().setCartProducts(null);
-        cartProduct.getCart().setUser(null);
+        cartProduct.setProduct(null);
+        cartProduct.setCart(null);
         return new ResponseEntity<CartProduct>(cartProduct, HttpStatus.OK);
     }
     @GetMapping("/carts_products/cart_id/{id}")
@@ -74,6 +71,8 @@ public class CartProductController {
         foundProduct.setCartProducts(null);
 
         CartProduct newCartProduct = cartProductRepository.save(new CartProduct(
+                foundProduct.getId(),
+                foundCart.getId(),
                 cartProduct.getQuantity(),
                 foundCart,
                 foundProduct
@@ -86,8 +85,24 @@ public class CartProductController {
         CartProduct foundCartProduct = cartProductRepository.findById(id)
                 .orElseThrow(()->new ResourceNotFoundException("CartProduct not found"));
 
-        cartRepository.deleteById(id);
+        cartProductRepository.deleteById(foundCartProduct.getId());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+    @PutMapping("/carts_products/{id}")
+    public  ResponseEntity<CartProduct> updateCartById(@PathVariable("id") Long id, @RequestBody CartProduct cartProduct)
+    {
+        CartProduct foundCartProduct = cartProductRepository.findById(id)
+                .orElseThrow(()->new ResourceNotFoundException("CartProduct not found"));
+
+        if(cartProduct.getQuantity() != null)
+             foundCartProduct.setQuantity(cartProduct.getQuantity());
+
+
+        CartProduct updateCartProduct = cartProductRepository.save(foundCartProduct);
+        updateCartProduct.setProduct(null);
+        updateCartProduct.setCart(null);
+
+        return new ResponseEntity<CartProduct>(updateCartProduct, HttpStatus.OK);
     }
 }
 

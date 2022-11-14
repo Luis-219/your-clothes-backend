@@ -13,6 +13,7 @@ import pe.com.yourclothes.backend.repositories.UserRepository;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api")
 public class CartController {
@@ -29,14 +30,8 @@ public class CartController {
         List<Cart> carts = cartRepository.findAll();
 
         for(Cart cart: carts){
-            for(CartProduct cartProduct: cart.getCartProducts())
-            {
-                cartProduct.setCart(null);
-                cartProduct.getProduct().setCartProducts(null);
-                cartProduct.getProduct().setShop(null);
-            }
-            cart.getUser().setCart(null);
-            cart.getUser().setShop(null);
+            cart.setCartProducts(null);
+            cart.setUser(null);
         }
         return new ResponseEntity<List<Cart>>(carts, HttpStatus.OK);
     }
@@ -46,8 +41,7 @@ public class CartController {
         Cart cart = cartRepository.findById(id)
                 .orElseThrow(()->new ResourceNotFoundException("Cart not found"));
         cart.setCartProducts(null);
-        cart.getUser().setShop(null);
-        cart.getUser().setCart(null);
+        cart.setUser(null);
 
         return new ResponseEntity<Cart>(cart, HttpStatus.OK);
     }
@@ -68,6 +62,7 @@ public class CartController {
         User foundUser = userRepository.findById(id)
                 .orElseThrow(()->new ResourceNotFoundException("User not found"));
         Cart newCart = cartRepository.save(new Cart(
+                foundUser.getId(),
                 cart.getTotal_purchase(),
                 cart.getQuantity_products(),
                 foundUser

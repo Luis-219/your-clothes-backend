@@ -15,6 +15,7 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     private Long id;
+    private Long id_user;
     private Double total_purchase;
     private Integer quantity_products;
 
@@ -26,7 +27,8 @@ public class Cart {
     private List<CartProduct> cartProducts;
 
 
-    public Cart(Double total_purchase, Integer quantity_products, User user) {
+    public Cart(Long id_user, Double total_purchase, Integer quantity_products, User user) {
+        this.id_user = id_user;
         this.total_purchase = total_purchase;
         this.quantity_products = quantity_products;
         this.user = user;
