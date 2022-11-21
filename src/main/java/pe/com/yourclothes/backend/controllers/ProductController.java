@@ -36,6 +36,7 @@ public class ProductController {
         for(Product product: products){
             product.setShop(null);
             product.setCartProducts(null);
+            product.setProductImage(null);
         }
         return new ResponseEntity<List<Product>>(products, HttpStatus.OK);
     }
@@ -62,7 +63,8 @@ public class ProductController {
                 product.getSeason(),
                 product.getYear(),
                 product.getPricetype(),
-                foundShop
+                foundShop,
+                product.getProductImage()
         ));
         return new ResponseEntity<Product>(newProduct, HttpStatus.CREATED);
     }
@@ -73,6 +75,7 @@ public class ProductController {
                 .orElseThrow(()->new ResourceNotFoundException("Product not found"));;
         product.setShop(null);
         product.setCartProducts(null);
+        product.setProductImage(null);
         return new ResponseEntity<Product>(product, HttpStatus.OK);
     }
     @GetMapping("products/shop_id/{id}")
@@ -85,6 +88,7 @@ public class ProductController {
         {
             product.setShop(null);
             product.setCartProducts(null);
+            product.setProductImage(null);
         }
 
         return new ResponseEntity<List<Product>>(products, HttpStatus.OK);
@@ -120,10 +124,11 @@ public class ProductController {
         if(product.getPricetype() != null)
             foundProduct.setPricetype(product.getPricetype());
 
+
         Product updateProduct = productRepository.save(foundProduct);
         updateProduct.setCartProducts(null);
-        updateProduct.getShop().setProductList(null);
-        updateProduct.getShop().setUser(null);
+        updateProduct.setShop(null);
+        updateProduct.setProductImage(null);
 
         return new ResponseEntity<Product>(updateProduct, HttpStatus.OK);
     }

@@ -43,7 +43,7 @@ public class BackendApplication {
 			shopRepository.save(shop);
 			Product product = new Product(shop.getId(), "Pants", shop.getName(), new Date(), "Disponible", 1, 100.00,
 					"Hombre", "M", "Lana", "Pants", "Cuero", "Verano", "2020",
-					"Oferta", shop);
+					"Oferta", shop, null);
 			productRepository.save(product);
 			User user2;
 			Long id = Long.valueOf(1);

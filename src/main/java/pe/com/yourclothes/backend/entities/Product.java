@@ -37,11 +37,14 @@ public class Product {
     @JoinColumn(name = "shop_id")
     private Shop shop;
 
+    @OneToOne(mappedBy = "product")
+    private ProductImage productImage;
+
     @OneToMany(mappedBy = "product")
     private List<CartProduct> cartProducts;
 
 
-    public Product(Long idShop, String name, String shopname, Date pubdate, String condition, Integer quantity, Double price, String gender, String size, String material, String brand, String type, String season, String year, String pricetype, Shop shop) {
+    public Product(Long idShop, String name, String shopname, Date pubdate, String condition, Integer quantity, Double price, String gender, String size, String material, String brand, String type, String season, String year, String pricetype, Shop shop, ProductImage productImage) {
         this.idShop = idShop;
         this.name = name;
         this.shopname = shopname;
@@ -58,5 +61,6 @@ public class Product {
         this.year = year;
         this.pricetype = pricetype;
         this.shop = shop;
+        this.productImage = productImage;
     }
 }
