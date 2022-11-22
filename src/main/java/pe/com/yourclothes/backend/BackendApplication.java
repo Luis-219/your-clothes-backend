@@ -9,7 +9,11 @@ import pe.com.yourclothes.backend.entities.Product;
 import pe.com.yourclothes.backend.entities.Shop;
 import pe.com.yourclothes.backend.entities.User;
 import pe.com.yourclothes.backend.entities.catalogue.*;
+import pe.com.yourclothes.backend.entities.catalogue2.Payment;
+import pe.com.yourclothes.backend.entities.catalogue2.Shipping;
 import pe.com.yourclothes.backend.repositories.*;
+import pe.com.yourclothes.backend.repositories.catalogue2.PaymentRepository;
+import pe.com.yourclothes.backend.repositories.catalogue2.ShippingRepository;
 
 import java.util.Date;
 
@@ -32,7 +36,9 @@ public class BackendApplication {
 			MaterialRepository materialRepository,
 			TypeRepository typeRepository,
 			SeasonRepository seasonRepository,
-			PricetypeRepository pricetypeRepository
+			PricetypeRepository pricetypeRepository,
+			PaymentRepository paymentRepository,
+			ShippingRepository shippingRepository
 	){
 		return	args -> {
 			User user = new User("Luis", "Rios", "fan@gmail.com", "12345", "263", "346", "Jr. roses");
@@ -96,6 +102,14 @@ public class BackendApplication {
 			Pricetype pricetype = new Pricetype("Oferta"); pricetypeRepository.save(pricetype);
 			Pricetype pricetype1 = new Pricetype("Normal"); pricetypeRepository.save(pricetype1);
 
+			Payment payment = new Payment("Pago en efectivo");
+			Payment payment1 = new Payment("Pago con tarjeta de crédito");
+			paymentRepository.save(payment);
+			paymentRepository.save(payment1);
+			Shipping shipping = new Shipping("Envío a domicilio");
+			Shipping shipping1 = new Shipping("Recojo en tienda");
+			shippingRepository.save(shipping);
+			shippingRepository.save(shipping1);
 
 			System.out.println(user2.getName());
 			System.out.println(cart.getUser().getName());

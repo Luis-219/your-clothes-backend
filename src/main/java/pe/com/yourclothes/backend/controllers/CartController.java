@@ -8,7 +8,6 @@ import pe.com.yourclothes.backend.entities.*;
 import pe.com.yourclothes.backend.exceptions.ResourceNotFoundException;
 import pe.com.yourclothes.backend.repositories.CartProductRepository;
 import pe.com.yourclothes.backend.repositories.CartRepository;
-import pe.com.yourclothes.backend.repositories.ProductRepository;
 import pe.com.yourclothes.backend.repositories.UserRepository;
 
 import java.util.List;

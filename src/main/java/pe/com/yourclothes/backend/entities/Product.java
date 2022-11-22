@@ -42,6 +42,8 @@ public class Product {
 
     @OneToMany(mappedBy = "product")
     private List<CartProduct> cartProducts;
+    @OneToMany(mappedBy = "product")
+    private List<OrderProduct> orderProducts;
 
 
     public Product(Long idShop, String name, String shopname, Date pubdate, String condition, Integer quantity, Double price, String gender, String size, String material, String brand, String type, String season, String year, String pricetype, Shop shop, ProductImage productImage) {

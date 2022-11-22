@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
+
 @Entity
 @Table(name = "users")
 @Data
@@ -27,6 +29,9 @@ public class User {
 
     @OneToOne(mappedBy = "user")
     private Cart cart;
+
+    @OneToMany(mappedBy = "user")
+    private List<Order> orderList;
 
     public User(String name, String lastname, String email, String password, String dni, String phone, String address) {
         this.name = name;

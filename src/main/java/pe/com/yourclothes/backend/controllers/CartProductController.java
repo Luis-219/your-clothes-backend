@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import pe.com.yourclothes.backend.entities.Cart;
 import pe.com.yourclothes.backend.entities.CartProduct;
 import pe.com.yourclothes.backend.entities.Product;
-import pe.com.yourclothes.backend.entities.User;
 import pe.com.yourclothes.backend.exceptions.ResourceNotFoundException;
 import pe.com.yourclothes.backend.repositories.CartProductRepository;
 import pe.com.yourclothes.backend.repositories.CartRepository;

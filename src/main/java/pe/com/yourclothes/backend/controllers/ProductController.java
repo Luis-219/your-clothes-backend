@@ -7,10 +7,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pe.com.yourclothes.backend.entities.CartProduct;
 import pe.com.yourclothes.backend.entities.Product;
+import pe.com.yourclothes.backend.entities.ProductImage;
 import pe.com.yourclothes.backend.entities.Shop;
-import pe.com.yourclothes.backend.entities.User;
 import pe.com.yourclothes.backend.exceptions.ResourceNotFoundException;
 import pe.com.yourclothes.backend.repositories.CartProductRepository;
+import pe.com.yourclothes.backend.repositories.ProductImageRepository;
 import pe.com.yourclothes.backend.repositories.ProductRepository;
 import pe.com.yourclothes.backend.repositories.ShopRepository;
 
@@ -28,6 +29,8 @@ public class ProductController {
     private ShopRepository shopRepository;
     @Autowired
     private CartProductRepository cartProductRepository;
+    @Autowired
+    private ProductImageRepository productImageRepository;
 
     @GetMapping("/products")
     public ResponseEntity<List<Product>> getAllProducts(){
@@ -37,6 +40,7 @@ public class ProductController {
             product.setShop(null);
             product.setCartProducts(null);
             product.setProductImage(null);
+            product.setOrderProducts(null);
         }
         return new ResponseEntity<List<Product>>(products, HttpStatus.OK);
     }
@@ -76,6 +80,7 @@ public class ProductController {
         product.setShop(null);
         product.setCartProducts(null);
         product.setProductImage(null);
+        product.setOrderProducts(null);
         return new ResponseEntity<Product>(product, HttpStatus.OK);
     }
     @GetMapping("products/shop_id/{id}")
@@ -89,6 +94,7 @@ public class ProductController {
             product.setShop(null);
             product.setCartProducts(null);
             product.setProductImage(null);
+            product.setOrderProducts(null);
         }
 
         return new ResponseEntity<List<Product>>(products, HttpStatus.OK);
@@ -129,6 +135,7 @@ public class ProductController {
         updateProduct.setCartProducts(null);
         updateProduct.setShop(null);
         updateProduct.setProductImage(null);
+        updateProduct.setOrderProducts(null);
 
         return new ResponseEntity<Product>(updateProduct, HttpStatus.OK);
     }
@@ -141,6 +148,8 @@ public class ProductController {
         {
             cartProductRepository.deleteById(cartProduct.getId());
         }
+        ProductImage productImage = productImageRepository.findByProduct(foundProduct);
+        productImageRepository.deleteById(productImage.getId());
         productRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
