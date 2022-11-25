@@ -41,7 +41,13 @@ public class BackendApplication {
 			ShippingRepository shippingRepository
 	){
 		return	args -> {
-			User user = new User("Luis", "Rios", "fan@gmail.com", "12345", "263", "346", "Jr. roses");
+
+		};
+	}
+}
+
+/*
+	User user = new User("Luis", "Rios", "fan@gmail.com", "12345", "263", "346", "Jr. roses");
 			userRepository.save(user);
 			Cart cart = new Cart(user.getId(), 0.00, 0, user);
 			cartRepository.save(cart);
@@ -113,7 +119,4 @@ public class BackendApplication {
 
 			System.out.println(user2.getName());
 			System.out.println(cart.getUser().getName());
-		};
-	}
-
-}
+*/

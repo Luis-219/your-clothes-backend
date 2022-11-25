@@ -10,11 +10,15 @@ import pe.com.yourclothes.backend.entities.Product;
 import pe.com.yourclothes.backend.entities.ProductImage;
 import pe.com.yourclothes.backend.entities.Shop;
 import pe.com.yourclothes.backend.exceptions.ResourceNotFoundException;
+import pe.com.yourclothes.backend.exporters.ProductsExporter;
 import pe.com.yourclothes.backend.repositories.CartProductRepository;
 import pe.com.yourclothes.backend.repositories.ProductImageRepository;
 import pe.com.yourclothes.backend.repositories.ProductRepository;
 import pe.com.yourclothes.backend.repositories.ShopRepository;
 
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -153,4 +157,22 @@ public class ProductController {
         productRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @GetMapping("/products/export/excel/{id}")
+    public void exportToExcel(@PathVariable("id") Long id, HttpServletResponse response) throws IOException {
+        response.setContentType("application/octet-stream");
+        String headerkey = "Content-Disposition";
+        String headervalue = "attachment; filename=products_report";
+        response.setHeader(headerkey, headervalue);
+
+        List<Product> productList = productRepository.findByIdShop(id);
+        List<Product> products = productRepository.findAll();
+
+        ProductsExporter productsExporter = new ProductsExporter(productList);
+
+        productsExporter.export(response);
+
+    }
+
+
 }
